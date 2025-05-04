@@ -1,0 +1,57 @@
+---
+title: "Monthly trend analysis"
+author: "Taslima Akter"
+date: '2022-06-13'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+#trend analysis
+library(readxl)
+excel_sheets("F:/Excel/Water Level Data.xlsx")
+data1<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="January Data" )
+data2<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="February Data" )
+data3<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="March Data" )
+data4<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="April Data" )
+data5<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="May Data" )
+data6<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="June Data" )
+data7<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="July Data" )
+data8<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="August Data" )
+data9<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="September Data" )
+data10<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="October Data" )
+data11<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="November Data" )
+data12<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="December Data" )
+```
+```{r}
+library(trend)
+mk.test(data1$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data2$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data3$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data4$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data5$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data6$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data7$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data8$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data9$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data10$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data11$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data12$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+```
+```{r}
+sens.slope(data1$'YR_AVE(m)', conf.level = 0.95)
+sens.slope(data2$'YR_MAX(m)', conf.level = 0.95)
+sens.slope(data3$'YR_MIN(m)', conf.level = 0.95)
+sens.slope(data4$'YR_AVE(m)', conf.level = 0.95)
+sens.slope(data5$'YR_MAX(m)', conf.level = 0.95)
+sens.slope(data6$'YR_MIN(m)', conf.level = 0.95)
+sens.slope(data7$'YR_AVE(m)', conf.level = 0.95)
+sens.slope(data8$'YR_MAX(m)', conf.level = 0.95)
+sens.slope(data9$'YR_MIN(m)', conf.level = 0.95)
+sens.slope(data10$'YR_AVE(m)', conf.level = 0.95)
+sens.slope(data11$'YR_MAX(m)', conf.level = 0.95)
+sens.slope(data12$'YR_MIN(m)', conf.level = 0.95)
+```
+

@@ -1,0 +1,118 @@
+---
+title: "Visualization in R"
+author: "Taslima Akter"
+date: "2023-06-18"
+output: word_document
+---
+
+```{r}
+##ggplot2, plotly, Lattice, RGL, Dygraphs, Leaflet, Highcharter, Patchwork, gganimate, ggridges.
+install.packages("knitr")
+
+install.packages("palmerpenguins")
+install.packages("ggplot2")
+library(ggplot2)
+library(palmerpenguins)
+View('palmerpenguins')
+ggplot(data=penguins) + geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g))
+```
+```{r}
+library('ggplot2')
+library('palmerpenguins')
+View('palmerpenguins')
+# adding the third variable species
+ggplot(data=penguins) + geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, color=species))
+# instead color we can use shape also
+ggplot(data=penguins) + geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, shape=species))
+# we can keep both color size and species
+ggplot(data=penguins) + geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, shape=species, size=species,color =species))
+# alpha aesthetics for large data
+ggplot(data=penguins) + geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, alpha=species))
+```
+```{r}
+#different geom type
+library(ggplot2)
+library(palmerpenguins)
+ggplot(data=penguins) + geom_smooth(mapping = aes(x=flipper_length_mm, y=body_mass_g))+
+   geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g,color=species))
+#different line
+ggplot(data=penguins) + geom_smooth(mapping = aes(x=flipper_length_mm, y=body_mass_g, linetype=species))
+#jitter
+ggplot(data=penguins) + geom_jitter(mapping = aes(x=flipper_length_mm, y=body_mass_g))
+#geombar
+ggplot(data = diamonds)+
+  geom_bar(mapping = aes(x=cut,color=cut))
+ggplot(data = diamonds)+
+  geom_bar(mapping = aes(x=cut,fill=cut))
+ggplot(data = diamonds)+
+  geom_bar(mapping = aes(x=cut,fill=clarity))
+```
+```{r}
+#facet for plotting all data subsets
+library(ggplot2)
+library(palmerpenguins)
+ggplot(data=penguins,aes(x=flipper_length_mm, y=body_mass_g)) + 
+  geom_point(aes(color=species))+
+  facet_wrap(~species)
+ggplot(data = diamonds)+
+  geom_bar(mapping = aes(x=cut,fill=cut))+
+  facet_wrap(~cut)
+ggplot(data = diamonds)+
+  geom_bar(mapping = aes(x=color,fill=cut))+
+  facet_wrap(~cut)
+#for complex data relation
+ggplot(data=penguins) + 
+  geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, color=species))+
+  facet_grid(sex~species)
+ggplot(data=penguins) + 
+  geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, color=species))+
+  facet_grid(~species)
+ggplot(data=penguins) + 
+  geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, color=species))+
+  facet_grid(~sex)
+
+```
+```{r}
+datax= read.csv("A:/Users/User/Downloads/hotel_bookings.csv")
+View(datax)
+library(ggplot2)
+head(datax)
+colnames(datax)
+ggplot(data = datax) +
+  geom_bar(mapping = aes(x = distribution_channel))+
+    facet_wrap(~deposit_type)+
+  theme(axis.text.x = element_text(angle = 45))
+ggplot(data = datax) +
+  geom_point(mapping = aes(x = lead_time, y = children))
+ggplot(data = datax) +
+  geom_bar(mapping = aes(x = hotel, fill = market_segment))
+#faceting market segment to clearly interpret
+ggplot(data = datax) +
+  geom_bar(mapping = aes(x = hotel,fill= hotel)) +
+  facet_wrap(~ market_segment)+
+   theme(axis.text.x = element_text(size = 5 ))
+#filtering data
+library(dplyr)
+dataf= filter(datax, 
+              (hotel =="City Hotel" & market_segment=="Online TA"))
+View(dataf)
+#annotations= notes in coordination, Label=title, subtitle
+ggplot(data=penguins) + 
+  geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, color=species))+ 
+ labs(title = "Palmer Penguins: Body Mass vs. Flipper Length",subtitle = "Sample of the Three Penguin Species",caption = "Data Collected by Dr Kristen Gorman")
+ggplot(data=penguins) + 
+  geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, color=species))+ 
+ labs(title = "Palmer Penguins: Body Mass vs. Flipper Length",subtitle = "Sample of the Three Penguin Species",caption = "Data Collected by Dr Kristen Gorman")+
+  annotate("text",x=220,y=3500,label="The Gentoos are the largest",color="purple",size= 3, angle = 25)
+# more simple
+library(ggplot2)
+library(palmerpenguins)
+p= ggplot(data=penguins) +
+  geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g, color=species))+ 
+ labs(title = "Palmer Penguins: Body Mass vs. Flipper Length",subtitle = "Sample of the Three Penguin Species",caption = "Data Collected by Dr Kristen Gorman")
+p+annotate("text",x=220,y=3500,label="The Gentoos are the largest",color="purple",size= 3, angle = 25)
+#save ggsave(), export
+library(ggplot2)
+ggsave("Three Penguine Species.png",plot = last_plot())
+```
+
