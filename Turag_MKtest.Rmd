@@ -1,0 +1,37 @@
+---
+title: "Mann Kendall Trend Test"
+author: "Taslima Akter"
+date: "08/03/2022"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+#trend analysis
+library(readxl)
+excel_sheets("F:/Excel/Water Level Data.xlsx")
+data<- read_excel("F:/Excel/Water Level Data.xlsx", sheet ="Yearly Average Data" )
+View(data)
+```
+```{r}
+library(trend)
+mk.test(data$'YR_AVE(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data$'YR_MAX(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+mk.test(data$'YR_MIN(m)',alternative = c("two.sided", "greater", "less"), continuity = TRUE)
+```
+```{r}
+sens.slope(data$'YR_AVE(m)', conf.level = 0.95)
+sens.slope(data$'YR_MAX(m)', conf.level = 0.95)
+sens.slope(data$'YR_MIN(m)', conf.level = 0.95)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
