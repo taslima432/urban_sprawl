@@ -1,0 +1,62 @@
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE, dev = "png")
+```
+
+This vignette offers a concise guide for using version 1.0.0 or higher of the `dtwSat` package to generate a land-use map.
+The package utilizes Time-Weighted Dynamic Time Warping (TWDTW) along with a 1-Nearest Neighbor (1-NN) classifier.
+The subsequent sections will walk you through the process of creating a land-use map based on a set of training samples 
+and a multi-band satellite image time series.
+
+## Reading Training Samples
+
+First, let's read a set of training samples that come with the `dtwSat` package installation.
+
+```{r , echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE}
+setwd("G:/Thesis/Thesis_data/2011")
+tif_files = list.files("G:/Thesis/Thesis_data/2011", pattern = "\\.tif$", full.names = TRUE) 
+tif_files
+library(dtwSat)
+
+samples <- st_read("G:/Thesis/Thesis_data/2011/L2011.gpkg")
+
+acquisition_date <- regmatches(tif_files, regexpr("[0-9]{8}", tif_files))
+acquisition_date <- as.Date(acquisition_date, format = "%Y%m%d")
+print(acquisition_date)
+samples
+library(stars)
+dc <- read_stars(tif_files,
+                 proxy = FALSE,
+                 along = list(time = acquisition_date),
+                 RasterIO = list(bands = 1:4))
+
+# set band names
+dc <- st_set_dimensions(dc, 3, c("NDBal","NDBI", "NDVI","NDWI"))
+
+# convert band dimension to attribute
+dc <- split(dc, c("band"))
+
+print(dc)
+twdtw_model <- twdtw_knn1(x = dc,
+                          y = samples,
+                          cycle_length = 'year',
+                          time_scale = 'day',
+                          time_weight = c(steepness = 0.1, midpoint = 50),
+                          formula = bands ~ s(time, k=4) )
+
+print(twdtw_model)
+plot(twdtw_model)
+lu2_map <- predict(dc, model = twdtw_model)
+print(lu2_map)
+ggplot() +
+  geom_stars(data = lu2_map) +
+  theme_minimal()
+write_stars(lu2_map, "lu2011_map.tif")
+```
+
+*Side note:* The date in the file name is not the true acquisition date for each pixel.
+MOD13Q1 is a 16-day composite product, and the date in the file name is the first day of this 16-day period.
+
+With the files and dates in hand, we can construct a stars satellite image time series for `dtwSat`.
+
