@@ -1,0 +1,35 @@
+---
+title: "Analysis"
+output: word_document
+date: "2024-11-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+install.packages("sf") #install
+library(sf) #load
+install.packages("tmap") #install
+library(tmap) #load
+install.packages("ggplot2")
+
+```
+```{r}
+library(tidyverse)
+library(sf)
+library(tmap)
+library(ggplot2)
+library(readr)
+data = read_csv("C:/Users/Asus/OneDrive - University of Leeds/Practical_GEOG5022M/Guided Report/Analysis_Data.csv")
+```
+```{r,dev='jpeg'}
+data |>
+  pivot_longer(cols=c("Fully Vac (18-24)":"Fully Vac (80+)"), names_to= "Age_Group", values_to="Vaccination_Rate")|>
+ ggplot(aes(x=Age_Group , y=Vaccination_Rate, color= Age_Group, fill= Age_Group))+
+  geom_boxplot(outlier.colour="black", outlier.shape=16,outlier.size=2, notch=FALSE)+
+  theme(axis.text.x = element_blank())+
+  ggtitle("Distribution of Vaccination Rate amongst MSOAs in Leeds City ")
+```
